@@ -13,106 +13,108 @@
 //        get(Object key) повертає значення (Object value) за ключем +
 
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class MyHashMap<E, T> {
+    private static final int CAPACITY = 16;
     private int size;
-    private NodeMap<E, T> start;
+    private NodeMap<E, T>[] table;
+
+    @SuppressWarnings("unchecked")
     public MyHashMap() {
         size = 0;
-        start = null;
+        table = (NodeMap<E, T>[]) new NodeMap[CAPACITY];
     }
     public void put(E key, T value) {
-        NodeMap<E, T> nodeMap = new NodeMap<>(key, value);
-        if(size == 0) {
-            start = nodeMap;
-            start.next = nodeMap;
-            size++;
+        NodeMap<E, T> node = new NodeMap<>(key, value);
+        int index = getBucketIndex(key); //Обчислити індекс бакета в який записувати
+        Objects.checkIndex(index, table.length); //Перевірка індексу ноду
+        NodeMap<E, T> currentNode = table[index];
+
+        while (currentNode != null) {
+            if (currentNode.key.equals(key)) {
+                currentNode.value = value; // Оновлення значення
+                return;
+            }
+            currentNode = currentNode.next;
         }
-        else {
-            NodeMap<E, T> current = start;
-            if(contains(key)) {
-                for (int i = 0; i < size; i++) {
-                    if(current.key.equals(key))
-                        current.value = value;
-                    current = current.next;
-                }
-            }
-            else {
-                for (int i = 0; i < size; i++) {
-                    current = current.next;
-                }
-                current.next = nodeMap;
-                current.next.next = nodeMap;
-                size++;
-            }
+
+        node.next = table[index];
+        table[index] = node;
+
+        size++;
+        if(size >= table.length) {
+            refactorMap();
         }
     }
     public void remove(E key) {
-        if(!contains(key))
-            return;
-        int index = getKeyIndex(key);
-        if(index == 0) {
-            start = start.next;
-            size--;
-        }
-        else {
-            getNodeByIndex(index - 1).next = getNodeByIndex(index + 1);
-            size--;
+        int index = getBucketIndex(key);
+        NodeMap<E, T> prev = null;
+        NodeMap<E, T> current = table[index];
+
+        while (current != null) {
+            if (current.key.equals(key)) {
+                if (prev != null) {
+                    prev.next = current.next;
+                } else {
+                    table[index] = current.next; //Якщо це єдиний елемент в бакеті
+                }
+                size--;
+                return;
+            }
+            prev = current;
+            current = current.next;
         }
     }
     public void clear() {
-        start = null;
-        size = 0;
+         Arrays.fill(table, null);
+         size = 0;
     }
     public int size() {
         return size;
     }
     public T get(E key) {
-        if(size == 0)
-            return null;
-        NodeMap<E, T> current = start;
-        for (int i = 0; i < size; i++) {
-            if(current.key.equals(key))
+        int index = getBucketIndex(key);
+        NodeMap<E, T> current = table[index];
+        while (current != null) {
+            if (current.key.equals(key)) { //Шукаємо ключ в бакеті
                 return current.value;
+            }
             current = current.next;
         }
         return null;
     }
-    public boolean contains(E key) {
-        if(size == 0)
-            return false;
-        NodeMap<E, T> current = start;
-        for(int i = 0; i < size; i ++) {
-            if(current.key.equals(key))
-                return true;
-            current = current.next;
-        }
-        return false;
+
+    public int getBucketIndex(E key) {
+        return key.hashCode() % table.length;
     }
-    public int getKeyIndex(E key) {
-        NodeMap<E, T> current = start;
-        for (int i = 0; i < size; i++) {
-            if(current.key.equals(key))
-                return i;
-            current = current.next;
+
+    @SuppressWarnings("unchecked")
+    private void refactorMap() {
+        NodeMap<E, T>[] refactoredMap = (NodeMap<E, T>[]) new NodeMap[table.length * 2];
+
+        for (NodeMap<E, T> node : table) {
+            while (node != null) { //Перебираємо по зв'язаному списку
+                NodeMap<E, T> next = node.next;
+                int index = getBucketIndex(node.key);
+                node.next = refactoredMap[index];
+                refactoredMap[index] = node;
+                node = next;
+            }
         }
-        return -1;
+
+        table = refactoredMap;
     }
-    public void print() {
-        System.out.print("Елементи MyHashMap: \n");
-        NodeMap<E, T> current = start;
-        for (int i = 0; i < size; i++) {
-            System.out.println("Key: " + current.key + " Value: " + current.value);
-            current = current.next;
-        }
-        System.out.print("\n");
+
+    @Override
+    public String toString() {
+        return "MyHashMap{" +
+                "size=" + size +
+                ", table=" + Arrays.toString(table) +
+                '}';
     }
-    public NodeMap<E, T> getNodeByIndex(int index) {
-        NodeMap<E, T> current = start;
-        for (int i = 0; i < index; i++) {
-            current = current.next;
-        }
-        return current;
-    }
+
     private static class NodeMap<E, T> {
         private final E key;
         private T value;
@@ -121,7 +123,6 @@ public class MyHashMap<E, T> {
         public NodeMap(E key, T value) {
             this.key = key;
             this.value = value;
-            this.next = null;
         }
     }
 }

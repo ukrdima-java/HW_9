@@ -2,7 +2,7 @@
 public class Main {
     public static void main(String[] args) {
         //MyArrayList
-        System.out.println("\nMyArrayList test:\n");
+        System.out.println("MyArrayList test:\n");
         MyArrayList<Integer> arrayList = new MyArrayList<>();
         System.out.println("Розмір масиву: " + arrayList.size());
         arrayList.add(100);
@@ -21,7 +21,7 @@ public class Main {
         arrayList.print();
 
         //MyLinkedList
-        System.out.println("\nMyLinkedList test:\n");
+        System.out.println("MyLinkedList test:\n");
         MyLinkedList<Integer> linkedList = new MyLinkedList<>();
         linkedList.add(100);
         linkedList.add(50);
@@ -57,7 +57,7 @@ public class Main {
 
 
         //MyStack
-        System.out.println("MyStack test:\n");
+        System.out.println("MyStack test:");
         MyStack<String> myStack = new MyStack<>();
         myStack.push("Dmytro");
         myStack.push("Ruslana");
@@ -77,7 +77,7 @@ public class Main {
         myStack.print();
 
         //MyHashMap
-        System.out.println("MyHashMap test:\n");
+        System.out.println("MyHashMap test:");
         MyHashMap<Integer, String> hashMap= new MyHashMap<>();
         hashMap.put(1, "Computer");
         System.out.println("Hashmap.get(1): " + hashMap.get(1));
@@ -87,6 +87,7 @@ public class Main {
         System.out.println("Hashmap.get(3): " + hashMap.get(3));
         hashMap.put(4, "Microphone");
         System.out.println("Hashmap.get(4): " + hashMap.get(4));
+        hashMap.put(2, "NewKey");
         System.out.println("Hashmap.get(2): " + hashMap.get(2));
         hashMap.put(5, "Smartphone");
         System.out.println("Hashmap.get(5): " + hashMap.get(5));
@@ -98,9 +99,7 @@ public class Main {
         hashMap.remove(1);
         hashMap.remove(3);
         System.out.println("Розмір HashMap: " + hashMap.size());
-        hashMap.print();
         hashMap.clear();
         System.out.println("Розмір HashMap: " + hashMap.size());
-        hashMap.print();
     }
 }

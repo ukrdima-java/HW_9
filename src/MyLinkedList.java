@@ -18,28 +18,27 @@ public class MyLinkedList<E> {
     private Node<E> last;
 
     public void add(E value) {
-        Node<E> lastNode = Node.create(value);
+        Node<E> newNode = Node.create(value);
         if(first == null) {
-            first = last = lastNode;
-        } else{
-            last.next = lastNode;
-            last = lastNode;
+            first = last = newNode;
+        }
+        else {
+            last.next = newNode;
+            newNode.prev = last;
+            last = newNode;
         }
         size++;
     }
 
     public void remove(int index) {
         Objects.checkIndex(index, size);
-        if(index == 0) {
-            first = first.next;
-            if(first == null)
-                last = null;
-        } else {
-            getNodeByIndex(index - 1).next = getNodeByIndex(index + 1);
-            if(index == size - 1) {
-                last = getNodeByIndex(index - 1);
-            }
+        Node<E> currentNode = first;
+        for(int i = 0; i < index; i++) {
+            currentNode = currentNode.next;
         }
+        Node<E> previousNode = currentNode.prev;
+        previousNode.next = currentNode.next;
+        currentNode.next.prev = previousNode;
         size--;
     }
     public void clear() {
@@ -51,22 +50,18 @@ public class MyLinkedList<E> {
     }
     public E get(int index) {
         Objects.checkIndex(index, size);
-        return getNodeByIndex(index).element;
+        Node<E> currentNode = first;
+        for(int i = 0; i < index; i++) {
+            currentNode = currentNode.next;
+        }
+        return currentNode.element;
     }
     public void print() {
+        Node<E> currentNode = first;
         System.out.println("Елементи MyLinkedList: ");
-        Node<E> current = first;
-        for (int i = 0; i < size; i++) {
-            System.out.print(current.element + " ");
-            current = current.next;
+        for(int i = 0; i < size; i++) {
+            System.out.print(currentNode.element + " ");
+            currentNode = currentNode.next;
         }
-        System.out.print("\n");
-    }
-    public Node<E> getNodeByIndex(int index) {
-        Node<E> current = first;
-        for (int i = 0; i < index; i++) {
-            current = current.next;
-        }
-        return current;
     }
 }
