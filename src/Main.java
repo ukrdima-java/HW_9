@@ -2,7 +2,7 @@
 public class Main {
     public static void main(String[] args) {
         //MyArrayList
-        System.out.println("MyArrayList test:\n");
+        System.out.println("\nMyArrayList test:");
         MyArrayList<Integer> arrayList = new MyArrayList<>();
         System.out.println("Розмір масиву: " + arrayList.size());
         arrayList.add(100);
@@ -21,7 +21,7 @@ public class Main {
         arrayList.print();
 
         //MyLinkedList
-        System.out.println("MyLinkedList test:\n");
+        System.out.println("\nMyLinkedList test:");
         MyLinkedList<Integer> linkedList = new MyLinkedList<>();
         linkedList.add(100);
         linkedList.add(50);
@@ -39,7 +39,7 @@ public class Main {
         linkedList.print();
 
         //MyQueue
-        System.out.println("MyQueue test:\n");
+        System.out.println("\nMyQueue test:");
         MyQueue<Integer> myQueue = new MyQueue<>();
         myQueue.add(100);
         myQueue.add(50);

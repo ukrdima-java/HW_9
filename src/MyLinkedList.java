@@ -58,10 +58,11 @@ public class MyLinkedList<E> {
     }
     public void print() {
         Node<E> currentNode = first;
-        System.out.println("Елементи MyLinkedList: ");
+        System.out.print("Елементи MyLinkedList: ");
         for(int i = 0; i < size; i++) {
             System.out.print(currentNode.element + " ");
             currentNode = currentNode.next;
         }
+        System.out.print("\n");
     }
 }
