@@ -107,14 +107,6 @@ public class MyHashMap<E, T> {
         table = refactoredMap;
     }
 
-    @Override
-    public String toString() {
-        return "MyHashMap{" +
-                "size=" + size +
-                ", table=" + Arrays.toString(table) +
-                '}';
-    }
-
     private static class NodeMap<E, T> {
         private final E key;
         private T value;
